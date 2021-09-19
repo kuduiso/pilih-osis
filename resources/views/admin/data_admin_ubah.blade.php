@@ -30,30 +30,14 @@
         <div>
             <label for="nama_user" class="text-gray-700">Nama</label>
             <input type="text" class="form-input mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="nama_user" id="nama_user" value="{{ $user->nama_user }}" placeholder="Masukkan nama">
-            @error('nama_user')
-                <span class="text-xs text-red-600">*{{ $message }}</span>
-            @enderror
         </div>
         <div class="mt-2">
             <label for="email" class="text-gray-700">E-mail</label>
             <input type="text" class="form-input mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="email" id="email" value="{{ $user->email }}" placeholder="Masukkan e-mail">
-            @error('email')
-                <span class="text-xs text-red-600">*{{ $message }}</span>
-            @enderror
-        </div>
-        <div class="mt-2">
-            <label for="password" class="text-gray-700">Password lama</label>
-            <input type="password" class="form-input mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="password" id="password" value="" placeholder="**********">
-            @error('password')
-                <span class="text-xs text-red-600">*{{ $message }}</span>
-            @enderror
         </div>
         <div class="mt-2">
             <label for="password_new" class="text-gray-700">Password baru</label>
             <input type="password" class="form-input mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="password_new" id="password_new" value="" placeholder="**********">
-            @error('password_new')
-                <span class="text-xs text-red-600">*{{ $message }}</span>
-            @enderror
         </div>
         <button class="mt-4 w-full bg-green-500 hover:bg-green-600 focus:ring-2 focus:ring-green-100 px-3 py-2 text-white rounded-md" type="submit">Simpan</button>
     </div>

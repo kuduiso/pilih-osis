@@ -77,7 +77,10 @@ class AdminController extends Controller
             return redirect('/admin/data-admin')
                             ->with('alert_gagal', 'Hapus gagal, master admin tidak boleh dihapus');
         } else {
-            if ($id <> Auth::id()) {
+            if (Auth::user()->role <> 'master') {
+                return redirect('/admin/data-admin')
+                            ->with('alert_gagal', 'Akses dibatasi');
+            } else {
                 $delete = User::destroy($check_admin->id_user);
                 if ($delete) {
                     return redirect('/admin/data-admin')
@@ -86,83 +89,63 @@ class AdminController extends Controller
                     return redirect('/admin/data-admin')
                             ->with('alert_gagal', 'Data gagal dihapus');
                 }
-            } else {
-                return redirect('/admin/data-admin')
-                            ->with('alert_gagal', 'Hapus gagal, akun sedang digunakan');
             }
         }
     }
 
     public function view_edit_admin($id) {
         $master_admin = User::where('role', 'master')->first();
-        // echo gettype($id);
-        // exit();
+        // IF NOT ADMIN MASTER
         if ((int)$id === $master_admin->id_user && Auth::id() <> $master_admin->id_user) {
             return redirect('/admin/data-admin')
                         ->with('alert_gagal', 'Data master tidak boleh diubah');
         } else {
-            $user = User::find($id);
-            $data = [
-                'title' => 'Edit Admin',
-                'user'  => $user
-            ];
-            return view('/admin/data_admin_ubah', $data);
+        // IF GENERAL ADMIN
+            if (Auth::id() <> (int)$id && Auth::user()->role <> 'master') {
+                // IF LOGGED IN ADMIN ISN'T MASTER ADMIN AND EDIT ANOTHER GENERAL ADMIN
+                return back()->with('alert_gagal', 'Akses dibatasi');
+            } else {
+                $user = User::find($id);
+                $data = [
+                    'title' => 'Edit Admin',
+                    'user'  => $user
+                ];
+                return view('/admin/data_admin_ubah', $data);
+            }
         }
     }
 
     public function edit_admin(Request $request, $id) {
-        // echo "<pre>";
-        // var_dump($request->input());
-        // echo "</pre>";
-
-        $data_user = User::find($id);
-
         $data_ubah = $request->input();
-        // echo array_key_exists('nama_user', $data_ubah);
-        // echo "<pre>";
-        // var_dump(array_keys($data_ubah));
-        // echo "</pre>";
+        // GET ALL NOT EMPTY DATA
         $temp_data = [];
         foreach(array_keys($data_ubah) as $key) {
             if ($key === '_method' || $key === '_token' || $data_ubah[$key] === '' || is_null($data_ubah[$key]) === true ) {
-                // echo $data_ubah[$key]."<br>";
                 continue;
             }
             $temp_data[$key] = $data_ubah[$key];
         }
-        // echo "<pre>";
-        // var_dump($temp_data);
-        // echo "</pre>";
-        // echo "</pre>";
+        // CHECK IF EMAIL EXIST
+        if (array_key_exists('email', $temp_data)) {
+            $check_email = User::firstWhere('email', $temp_data['email']);
+            if($check_email) {
+                if($check_email->id_user <> $id) {
+                    return back()->with('alert_gagal', 'E-mail sudah digunakan');
+                }
+            }
+        }
+        // CHECK IF CHANGE PASSWORD
+        if (array_key_exists('password_new', $temp_data)) {
+            $temp_data['password'] = Hash::make($temp_data['password_new']);
+            unset($temp_data['password_new']);
+        }
 
-        // echo Auth::user()->password;
-        var_dump(Hash::check('admin2021',Auth::user()->password));
-
-        // $validator = Validator::make($request->all(),[
-        //     'nama_user' => 'required',
-        //     'email' => 'required|email:filter|unique:users,email',
-        // ],
-        // [
-        //     'required' => ':attribute wajib diisi',
-        //     'unique' => ':attribute sudah terdaftar',
-        //     'email' => ':attribute tidak valid',
-
-        // ],
-        // [
-        //     'nama_user' => 'Nama',
-        //     'email' => 'E-mail',
-        // ]);
-
-        // if($validator->fails()) {
-        //     return back()
-        //             ->withErrors($validator)
-        //             ->with('alert_gagal', 'Data gagal diubah');
-        // } else {
-        //     echo "hore";
-        // }
-
-        // Jika ubah email cek if exists
-        // Jika ubah password cek password lama
-
+        // UPDATE AND REDIRECT
+        if (User::where('id_user', $id)->update($temp_data)) {
+            return redirect('/admin/data-admin')
+                        ->with('alert_sukses', 'Data '.$request->input('nama_user').' berhasil diubah');
+        } else {
+            return back()->with('alert_gagal', 'Data gagal diubah');
+        }
     }
 }

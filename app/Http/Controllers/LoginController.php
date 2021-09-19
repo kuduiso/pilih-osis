@@ -51,12 +51,6 @@ class LoginController extends Controller
                             ->with('status', 'E-mail/Password salah')
                             ->withInput();
         }
-
-        // echo "<pre>";
-        // var_dump($request->input());
-        // echo "</pre>";
-        // exit();
-
     }
 
     public function check_login_voting() {
