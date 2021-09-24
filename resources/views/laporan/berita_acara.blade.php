@@ -94,14 +94,14 @@
             </table>
             <p>Demikian berita acara ini kami buat untuk dapat dipergunakan sebagaimana mestinya.</p>
             <p style="text-align: right">{{ $tempat }}, {{ $tanggal }}</p>
-            <table>
+            <table style="border: 0px solid white;">
                 @foreach ($voting as $v)
                 <tr style="vertical-align: bottom;">
-                    <td style="vertical-align: bottom; width: 5%; height: 60px">
+                    <td style="vertical-align: bottom; width: 5%; height: 60px;  border: 0px solid white;">
                         {{ ++$loop->index }}.</td>
-                    <td style="vertical-align: bottom; width: 45%; height: 60px">
+                    <td style="vertical-align: bottom; width: 45%; height: 60px;  border: 0px solid white;">
                         {{ $v->nama_kandidat }}</td>
-                    <td style="vertical-align: bottom; width: 50%; height: 60px">
+                    <td style="vertical-align: bottom; width: 50%; height: 60px;  border: 0px solid white;">
                         (..............................)</td>
                 </tr>
                 @endforeach

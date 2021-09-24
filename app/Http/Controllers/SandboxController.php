@@ -15,9 +15,14 @@ class SandboxController extends Controller
 {
 
     public function index() {
-        echo "<pre>";
+        // $voting = DB::table('kandidat')
+        //             ->leftJoin('voting', 'kandidat.id_kandidat', '=', 'voting.id_kandidat')
+        //             ->select(DB::raw('kandidat.nama_kandidat, COUNT(voting.id_pemilih) as total_suara'))
+        //             ->groupBy('kandidat.nama_kandidat')
+        //             ->get();
+        // echo "<pre>";
         // var_dump(Auth::guard('elector')->user());
-        var_dump(Session('user_elector')->id_pemilih);
-        echo "</pre>";
+        // var_dump($voting);
+        // echo "</pre>";
     }
 }

@@ -228,10 +228,11 @@ class AdminController extends Controller
         $data['tanggal'] = $this->_tgl_indo($request->input('tanggal'));
 
         // DOM PDF
-        $voting = DB::table('voting')
-                    ->leftJoin('kandidat', 'voting.id_kandidat', '=', 'kandidat.id_kandidat')
-                    ->select(DB::raw('kandidat.nama_kandidat, count(voting.id_kandidat) as total_suara'))
-                    ->groupBy('voting.id_kandidat')
+        $voting = DB::table('kandidat')
+                    ->leftJoin('voting', 'kandidat.id_kandidat', '=', 'voting.id_kandidat')
+                    ->select(DB::raw('kandidat.nama_kandidat, COUNT(voting.id_pemilih) as total_suara'))
+                    ->groupBy('kandidat.nama_kandidat')
+                    ->orderBy('total_suara', 'desc')
                     ->get();
         $data['voting'] = $voting;
         $pdf = PDF::loadview('laporan/berita_acara', $data)->setPaper('A4', 'potrait');

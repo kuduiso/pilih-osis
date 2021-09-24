@@ -24,17 +24,17 @@
     <form action="{{ action('AdminController@proses_berita_acara') }}" method="POST" class="mx-auto flex flex-col w-full md:w-1/2">
         @csrf
         <label for="nama_ketua" class="mt-2">Ketua panitia:</label>
-        <input type="text" class="form-input" name="nama_ketua" id="nama_ketua">
+        <input type="text" class="form-input" name="nama_ketua" id="nama_ketua" required>
         @error('nama_ketua')
         <span class="text-red-500 text-sm">*{{ $message }}</span>
         @enderror
         <label for="tempat" class="mt-2">Tempat Pemilihan:</label>
-        <input type="text" class="form-input" name="tempat" id="tempat">
+        <input type="text" class="form-input" name="tempat" id="tempat" required>
         @error('tempat')
         <span class="text-red-500 text-sm">*{{ $message }}</span>
         @enderror
         <label for="tanggal" class="mt-2">Tanggal Pemilihan:</label>
-        <input type="date" class="form-input" name="tanggal" id="tanggal">
+        <input type="date" class="form-input" name="tanggal" id="tanggal" required>
         @error('tanggal')
         <span class="text-red-500 text-sm">*{{ $message }}</span>
         @enderror
