@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Pemilih;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -10,10 +11,12 @@ class LoginController extends Controller
 {
 
     public function index() {
-        if(Auth::user()->role === 'master' || Auth::user()->role === 'admin') {
+        if(Auth::guard('web')->check()) {
             return redirect('/admin/dashboard');
-        } else {
+        } else if (Auth::guard('elector')->check()) {
             return redirect('/voting');
+        } else {
+            abort(404);
         }
     }
 
@@ -21,12 +24,11 @@ class LoginController extends Controller
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email:filter',
-            'password' => 'required|min:8',
+            'password' => 'required',
         ],
         [
             'required' => ':attribute wajib diisi',
             'email' => ':attribute tidak valid',
-            'min' => ':attribute minimal 8 karakter'
 
         ],
         [
@@ -53,16 +55,33 @@ class LoginController extends Controller
         }
     }
 
-    public function check_login_voting() {
-
+    public function check_login_voting(Request $request) {
+        $nis_pemilih = $request->input('nis_pemilih');
+        $no_token = $request->input('no_token');
+        $pemilih = Pemilih::where([
+                        'nis_pemilih' => $nis_pemilih,
+                        'no_token' => $no_token,
+                        'status' => 0
+                        ])->first();
+        if ($pemilih) {
+            $request->session()->put('user_elector', $pemilih);
+            $request->session()->put('login_elector', true);
+            return redirect('/voting');
+        } else {
+            return redirect('/')
+                        ->with('alert_gagal', 'Anda sudah memilih');
+        }
     }
 
-    public function logout() {
-        if(Auth::user()->role === 'master' || Auth::user()->role === 'admin') {
-            Auth::logout();
-            return redirect('/login-admin');
-        } else {
-            return redirect('/login');
-        }
+    public function logout_admin() {
+        Auth::logout();
+        return redirect('/login-admin');
+    }
+
+    public function logout_elector(Request $request) {
+        $request->session()->forget('user_elector');
+        $request->session()->forget('login_elector');
+        $request->session()->flush();
+        return redirect('/');
     }
 }

@@ -3,21 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Dompdf\Dompdf;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
-    public function __construct()
-    {
-
-    }
-
     public function index()
     {
-        return view('admin/dashboard', ['title' => 'Dashboard Admin']);
+        $pemilih = DB::table('pemilih')
+                    ->select(DB::raw('COUNT(id_pemilih) as total_pemilih, COUNT(CASE WHEN status > 0 THEN 1 END) as total_sudah_pilih'))
+                    ->get()
+                    ->first();
+        $kandidat = DB::table('kandidat')
+                    ->select(DB::raw('COUNT(id_kandidat) as total_kandidat'))
+                    ->get()
+                    ->first();
+        // echo "<pre>";
+        // var_dump($kandidat);
+        // var_dump($pemilih->total_pemilih);
+        // echo $kandidat[0]['total_kandidat'];
+        // echo "</pre>";
+        // exit();
+        $data['pemilih'] = $pemilih;
+        $data['kandidat'] = $kandidat;
+        $data['title'] = 'Dashboard Admin';
+        return view('admin/dashboard', $data);
     }
 
     public function data_admin() {
@@ -77,6 +93,8 @@ class AdminController extends Controller
             return redirect('/admin/data-admin')
                             ->with('alert_gagal', 'Hapus gagal, master admin tidak boleh dihapus');
         } else {
+            // IF WANNA RESTRICT ACCESS FOR MASTER ADMIN ONLY
+            /*
             if (Auth::user()->role <> 'master') {
                 return redirect('/admin/data-admin')
                             ->with('alert_gagal', 'Akses dibatasi');
@@ -90,6 +108,16 @@ class AdminController extends Controller
                             ->with('alert_gagal', 'Data gagal dihapus');
                 }
             }
+            */
+
+            $delete = User::destroy($check_admin->id_user);
+            if ($delete) {
+                return redirect('/admin/data-admin')
+                        ->with('alert_sukses', 'Data berhasil dihapus');
+            } else {
+                return redirect('/admin/data-admin')
+                        ->with('alert_gagal', 'Data gagal dihapus');
+            }
         }
     }
 
@@ -100,6 +128,14 @@ class AdminController extends Controller
             return redirect('/admin/data-admin')
                         ->with('alert_gagal', 'Data master tidak boleh diubah');
         } else {
+            $user = User::find($id);
+                $data = [
+                    'title' => 'Edit Admin',
+                    'user'  => $user
+                ];
+                return view('/admin/data_admin_ubah', $data);
+
+        /* ===== IF WANNA RESTRICT ACCESS FOR MASTER ADMIN ONLY
         // IF GENERAL ADMIN
             if (Auth::id() <> (int)$id && Auth::user()->role <> 'master') {
                 // IF LOGGED IN ADMIN ISN'T MASTER ADMIN AND EDIT ANOTHER GENERAL ADMIN
@@ -112,6 +148,7 @@ class AdminController extends Controller
                 ];
                 return view('/admin/data_admin_ubah', $data);
             }
+        */
         }
     }
 
@@ -147,5 +184,106 @@ class AdminController extends Controller
         } else {
             return back()->with('alert_gagal', 'Data gagal diubah');
         }
+    }
+
+    public function reset_data() {
+        DB::table('kandidat')->delete();
+        DB::table('users')->where('role', '=', 'admin')->delete();
+        DB::table('voting')->delete();
+        DB::table('pemilih')->delete();
+        $all = Storage::allFiles('public/foto_kandidat');
+        foreach($all as $k) {
+            echo $k;
+            Storage::delete($k);
+        }
+        return redirect('/admin/dashboard');
+    }
+
+    public function proses_berita_acara(Request $request) {
+        $ketua = $request->input('nama_ketua');
+        $tempat = $request->input('tempat');
+        $tanggal = $request->input('tanggal');
+        // DOM PDF
+        $dompdf = new Dompdf();
+        $dompdf->getOptions()->setChroot(url('storage/foto_kandidat'));
+        $dompdf->loadHtml('hello world');
+
+        $dompdf->setPaper('A4', 'landscape');
+
+        $dompdf->render();
+
+        $dompdf->stream("e-voting_absensi-kegiatan.pdf", array("Attachment" => false));
+        exit(0);
+    }
+
+    public function proses_absensi_kegiatan() {
+        $dompdf = new Dompdf();
+        $dompdf->getOptions()->setChroot(url('storage/foto_kandidat'));
+
+        $asset_css = asset('css/app.css');
+        $nama ="ridho";
+        $url_image = url('storage/foto_kandidat');
+
+        $html = <<<HTML
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                        <link rel="stylesheet" type="text/css" href="$asset_css">
+                    </head>
+                    <body>
+                        <div class="m-3">
+                            <div class="flex flex-row">
+                                <div>
+                                    <img src="{{ url('storage/logo-evoting.png') }}" alt="Logo E-voting" class="max-w-125px">
+                                </div>
+                                <div class="text-center flex-auto self-center">
+                                    <h1 class="font-bold text-xl">PEMILIHAN KETUA OSIS</h1>
+                                    <p>Jln. Sultan Agung Tirtayasa Kec. Tirtayasa Kab. Serang Banten</p>
+                                    <p>www.smptirtayasa.sch.id, E-mail: mail@tirtayasa.com, Telp:(0351) 5115099</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-500 my-3 p-3 font-bold text-center text-white">
+                                <p>ABSENSI PEMILIHAN KETUA OSIS</p>
+                            </div>
+
+                            <table class="table-auto w-full border-collapse border border-gray-900">
+                                <thead>
+                                    <tr>
+                                        <th class="border border-gray-900">NO</th>
+                                        <th class="border border-gray-900">NIS</th>
+                                        <th class="border border-gray-900">NAMA</th>
+                                        <th class="border border-gray-900">KELAS</th>
+                                        <th class="border border-gray-900">TTD</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-gray-900">$nama</td>
+                                        <td class="border border-gray-900">$asset_css</td>
+                                        <td class="border border-gray-900"><img src="$url_image" alt=""></td>
+                                        <td class="border border-gray-900">asd</td>
+                                        <td class="border border-gray-900">asd</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </body>
+                </html>
+                HTML;
+
+        $dompdf->loadHtml($html);
+
+        $dompdf->setPaper('A4', 'landscape');
+
+        $dompdf->render();
+
+        $dompdf->stream("e-voting_absensi-kegiatan.pdf", array("Attachment" => false));
+        exit(0);
+    }
+
+    public function view_absensi_kegiatan() {
+        $data['nama'] = 'Ridho';
+        return view('/laporan/absensi_kegiatan', $data);
     }
 }

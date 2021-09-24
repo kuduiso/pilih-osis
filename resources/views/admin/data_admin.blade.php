@@ -18,36 +18,35 @@
 <div class="flex flex-col mt-8">
     <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div
-            class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-            <table class="min-w-full">
+            class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200 bg-white p-2">
+            <table id="tbl-data-admin" class="display min-w-full">
                 <thead>
                     <tr>
                         <th
-                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            class="px-0 py-3 w-14 border-b border-gray-200 bg-blue-500 text-center text-xs leading-4 font-medium text-white uppercase tracking-wider">
                             NO</th>
                         <th
-                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            class="px-6 py-3 border-b border-gray-200 bg-blue-500 text-center text-xs leading-4 font-medium text-white uppercase tracking-wider">
                             NAMA</th>
                         <th
-                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            class="px-6 py-3 border-b border-gray-200 bg-blue-500 text-center text-xs leading-4 font-medium text-white uppercase tracking-wider">
                             E-MAIL</th>
                         <th
-                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            class="px-6 py-3 border-b border-gray-200 bg-blue-500 text-center text-xs leading-4 font-medium text-white uppercase tracking-wider">
                             PASSWORD</th>
                         <th
-                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            class="px-6 py-3 w-24 border-b border-gray-200 bg-blue-500 text-center text-xs leading-4 font-medium text-white uppercase tracking-wider">
                             SEBAGAI</th>
                         <th
-                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            class="px-6 py-3 border-b border-gray-200 bg-blue-500 text-center text-xs leading-4 font-medium text-white uppercase tracking-wider">
                             AKSI</th>
                     </tr>
                 </thead>
-
                 <tbody class="bg-white">
-                    @forelse ($data_admin as $dta)
+                    @foreach ($data_admin as $dta)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap border-b border-gray-200">
-                            <div class="text-sm leading-5 text-gray-900">{{ $loop->index+1 }}</div>
+                            <div class="text-sm leading-5 text-gray-900">{{ $loop->index+1 }} </div>
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap border-b border-gray-200">
@@ -56,8 +55,8 @@
                             </div>
                         </td>
 
-                        <td class="px-6 py-4 whitespace-nowrap border-b border-gray-200">
-                            <div class="text-sm leading-5 text-gray-900">{{ $dta->email }}</div>
+                        <td class="px-6 py-4  whitespace-nowrap border-b border-gray-200">
+                            <div class="text-sm leading-5 text-gray-900">{{ $dta->email }} </div>
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap border-b border-gray-200">
@@ -84,7 +83,7 @@
                                 </div>
                             </a>
 
-                            <button type="button" onclick="on_delete('{{ $dta->id_user }}', '{{ $dta->nama_user }}')">
+                            <button type="button" onclick="on_delete('{{ $dta->id_user }}','{{ $dta->nama_user }}')">
                                 <div class="flex items-center p-2 bg-red-600 hover:bg-red-700 rounded-md text-white">
                                     <svg class="h-6 w-6 fill-current-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
@@ -97,13 +96,7 @@
                             </button>
                         </td>
                     </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="text-center text-gray-500 leading-5 text-md font-medium px-6 py-4">
-                            Tidak ada data
-                        </td>
-                    </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -112,9 +105,12 @@
 @endsection
 @section('javascript')
 <script>
+    $(document).ready( function () {
+        const table = $('#tbl-data-admin').DataTable();
+    });
     function on_delete(id, nama) {
         Swal.fire({
-            title: 'Apakah Anda ingin menghapus data \''+nama+'\', nomor id '+id+'?',
+            title: 'Apakah Anda ingin menghapus data \''+nama+'\' ?',
             icon: 'warning',
             showDenyButton: true,
             confirmButtonText: 'Iya',
@@ -149,6 +145,5 @@
         alert_gagal("{{ session('alert_gagal') }}")
         @endif
     });
-
 </script>
 @endsection

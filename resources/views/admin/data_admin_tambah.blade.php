@@ -28,28 +28,28 @@
     <div class="card flex-col max-w-md">
         <div>
             <label for="nama_user" class="text-gray-700">Nama</label>
-            <input type="text" class="form-input mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="nama_user" id="nama_user" value="{{ old('nama_user') }}" placeholder="Masukkan nama">
+            <input type="text" class="form-input mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="nama_user" id="nama_user" value="{{ old('nama_user') }}" placeholder="Masukkan nama" required oninvalid="this.setCustomValidity('Wajib diisi')" oninput="this.setCustomValidity('')">
             @error('nama_user')
                 <span class="text-xs text-red-600">*{{ $message }}</span>
             @enderror
         </div>
         <div class="mt-2">
             <label for="email" class="text-gray-700">E-mail</label>
-            <input type="text" class="form-input mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="email" id="email" value="{{ old('email') }}" placeholder="Masukkan e-mail">
+            <input type="text" class="form-input mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="email" id="email" value="{{ old('email') }}" placeholder="Masukkan e-mail" required oninvalid="this.setCustomValidity('Wajib diisi')" oninput="this.setCustomValidity('')">
             @error('email')
                 <span class="text-xs text-red-600">*{{ $message }}</span>
             @enderror
         </div>
         <div class="mt-2">
             <label for="password" class="text-gray-700">Password</label>
-            <input type="password" class="form-input mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="password" id="password" value="{{ old('password') }}" placeholder="**********">
+            <input type="password" class="form-input mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="password" id="password" value="{{ old('password') }}" placeholder="**********" required oninvalid="this.setCustomValidity('Wajib diisi')" oninput="this.setCustomValidity('')">
             @error('password')
                 <span class="text-xs text-red-600">*{{ $message }}</span>
             @enderror
         </div>
         <div class="mt-2">
             <label for="password_confirm" class="text-gray-700">Konfirmasi Password</label>
-            <input type="password" class="form-input mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="password_confirm" id="password_confirm" value="{{ old('password_confirm') }}" placeholder="**********">
+            <input type="password" class="form-input mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="password_confirm" id="password_confirm" value="{{ old('password_confirm') }}" placeholder="**********" required oninvalid="this.setCustomValidity('Wajib diisi')" oninput="this.setCustomValidity('')">
             @error('password_confirm')
                 <span class="text-xs text-red-600">*{{ $message }}</span>
             @enderror

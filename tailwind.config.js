@@ -23,6 +23,7 @@ module.exports = {
             indigo: colors.indigo,
             red: colors.rose,
             yellow: colors.amber,
+            orange: colors.orange,
         },
         fontFamily: {
             sans: ['Graphik', 'sans-serif'],

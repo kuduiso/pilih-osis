@@ -20,6 +20,8 @@ class RedirectIfAuthenticated
     {
         if (Auth::guard($guard)->check()) {
             return redirect(RouteServiceProvider::HOME);
+        } else if ($request->session()->get('login_elector')) {
+            return redirect('/voting');
         }
 
         return $next($request);

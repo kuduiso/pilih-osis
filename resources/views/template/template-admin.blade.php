@@ -6,8 +6,9 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>E-Voting | @yield('title')</title>
         @section('assets-head')
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/sweetalert2.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.dataTables.min.css') }}">
         <link rel="icon" href="{{ asset('favicon.png')  }}" sizes="48x48" type="image/png">
         <script src="{{ asset('js/app.js') }}" defer></script>
         <script src="{{ asset('js/alpine.min.js') }}" defer></script>
@@ -20,7 +21,7 @@
         <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200">
             <div :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false" class="fixed z-20 inset-0 bg-black opacity-50 transition-opacity lg:hidden"></div>
 
-            <div :class="sidebarOpen ? 'translate-x-0 ease-out' : '-translate-x-full ease-in'" class="fixed z-30 inset-y-0 left-0 w-64 transition duration-300 transform bg-gradient-to-bl from-blue-custom-a to-blue-500 overflow-y-auto lg:translate-x-0 lg:static lg:inset-0">
+            <div :class="sidebarOpen ? 'translate-x-0 lg:-translate-x-full ease-out' : '-translate-x-full lg:translate-x-0 lg:static lg:inset-0 ease-in'" class="fixed z-30 inset-y-0 left-0 w-64 transition duration-300 transform bg-gradient-to-bl from-blue-custom-a to-blue-500 overflow-y-auto translate-x-0">
                 <div class="flex items-center justify-center mt-8">
                     <div class="flex items-center">
                         <svg class="fill-current text-white h-8 w-8" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -89,7 +90,7 @@
                         </li>
                         <div :class="laporanOpen ? 'block' : 'hidden'" class="ml-4">
                             <li>
-                                <a href="#" class="flex items-center hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 text-white py-2 px-6">
+                                <a href="{{ url('admin/absensi-kegiatan') }}" class="flex items-center hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 text-white py-2 px-6">
                                     <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
                                     </svg>
@@ -97,7 +98,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" class="flex items-center hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 text-white py-2 px-6">
+                                <a href="{{ url('admin/berita-acara') }}" class="flex items-center hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100 text-white py-2 px-6">
                                     <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
                                     </svg>
@@ -121,26 +122,12 @@
             <div class="flex-1 flex flex-col overflow-hidden">
                 <header class="flex justify-between items-center py-4 px-6 bg-white border-b-4 border-gray-100">
                     <div class="flex items-center">
-                        <button @click="sidebarOpen = true" class="text-gray-500 focus:outline-none lg:hidden">
+                        <button @click="sidebarOpen = ! sidebarOpen" class="text-gray-500 focus:outline-none">
                             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M4 6H20M4 12H20M4 18H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round"></path>
                             </svg>
                         </button>
-
-                        <div class="relative mx-4 lg:mx-0">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                                <svg class="h-5 w-5 text-gray-500" viewBox="0 0 24 24" fill="none">
-                                    <path
-                                        d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    </path>
-                                </svg>
-                            </span>
-
-                            <input class="form-input w-32 sm:w-64 rounded-md pl-10 pr-4 focus:border-indigo-600" type="text"
-                                placeholder="Search">
-                        </div>
                     </div>
 
                     <div class="flex items-center">
@@ -162,11 +149,11 @@
                             <div x-show="dropdownOpen"
                                 class="absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-10"
                                 style="display: none;">
-                                <a href="#"
+                                <a href="{{ action('AdminController@view_edit_admin', Auth::id()) }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Profile</a>
-                                <a href="#"
+                                <a href="/admin/reset-data"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Reset</a>
-                                <a href="/logout"
+                                <a href="/logout-admin"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Logout</a>
                             </div>
                         </div>
@@ -185,5 +172,7 @@
     </div>
 
     {{-- JAVASCRIPT --}}
+    <script type="text/javascript" charset="utf8" src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
+    <script type="text/javascript" charset="utf8" src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     @yield('javascript')
 </body>
