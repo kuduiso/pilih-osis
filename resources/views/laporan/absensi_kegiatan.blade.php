@@ -1,45 +1,77 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+        <style>
+            table {
+                border: 1px solid black;
+                border-collapse: collapse;
+                margin-top: 5px;
+                width: 100%;
+            }
+
+            tr, th, td {
+                border: 1px solid black;
+                padding: 5px;
+            }
+
+            .block-grey {
+                background-color: #575555;
+                font-weight: bold;
+                padding: 3px;
+                text-align: center;
+                font-size: 18px;
+                color: #ffffff;
+            }
+
+            h1 {
+                line-height: 0.8;
+            }
+            p {
+                line-height: 0.5;
+            }
+        </style>
     </head>
     <body>
-        <div class="m-3">
-            <div class="flex flex-row">
-                <div>
-                    <img src="{{ url('storage/logo-evoting.png') }}" alt="Logo E-voting" class="max-w-125px">
-                </div>
-                <div class="text-center flex-auto self-center">
-                    <h1 class="font-bold text-xl">PEMILIHAN KETUA OSIS</h1>
+        <table>
+            <tr>
+                <td  style="text-align: center; border: 1px solid white; width: 20%;">
+                    <img src="{{ public_path('storage/logo-evoting.png') }}" alt="Logo E-voting" style="width: 125px;">
+                </td>
+                <td style="text-align: center; border: 1px solid white; width: 80%;">
+                    <h1>PEMILIHAN KETUA OSIS</h1>
                     <p>Jln. Sultan Agung Tirtayasa Kec. Tirtayasa Kab. Serang Banten</p>
                     <p>www.smptirtayasa.sch.id, E-mail: mail@tirtayasa.com, Telp:(0351) 5115099</p>
-                </div>
-            </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" class="block-grey" style="border: 1px solid white">
+                    <p>ABSENSI PEMILIHAN KETUA OSIS</p>
+                </td>
+            </tr>
+        </table>
 
-            <div class="bg-gray-500 my-3 p-3 font-bold text-center text-white">
-                <p>ABSENSI PEMILIHAN KETUA OSIS</p>
-            </div>
-
-            <table class="table-auto w-full border-collapse border border-gray-900">
-                <thead>
-                    <tr>
-                        <th class="border border-gray-900">NO</th>
-                        <th class="border border-gray-900">NIS</th>
-                        <th class="border border-gray-900">NAMA</th>
-                        <th class="border border-gray-900">KELAS</th>
-                        <th class="border border-gray-900">TTD</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-900">as</td>
-                        <td class="border border-gray-900">asd</td>
-                        <td class="border border-gray-900">{{ $nama }}</td>
-                        <td class="border border-gray-900">asd</td>
-                        <td class="border border-gray-900">asd</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <table>
+            <thead style="color: white">
+                <tr style="background-color: #606160;">
+                    <th style="width: 75px">NO</th>
+                    <th>NIS</th>
+                    <th>NAMA</th>
+                    <th>KELAS</th>
+                    <th colspan="2">TTD</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($pemilih as $p)
+                <tr>
+                    <td style="text-align: center">{{ ++$loop->index }}</td>
+                    <td>{{ $p->nis_pemilih }}</td>
+                    <td>{{ $p->nama_pemilih }}</td>
+                    <td>{{ $p->kelas_pemilih }}</td>
+                    <td>{{ ($loop->index)%2 === 1 ? $loop->index : '' }}</td>
+                    <td>{{ ($loop->index)%2 === 0 ? $loop->index : '' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
     </body>
 </html>

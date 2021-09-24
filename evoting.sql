@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Membuang data untuk tabel db_evoting.users: ~2 rows (lebih kurang)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id_user`, `nama_user`, `email`, `password`, `role`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, 'master admin', 'admin2021@admin.com', '$2y$10$vokdTRTD22srSXNOmCibjOO1zAEzvrykJ/BDGq3.cJ7VkF8SM2ONC', 'master', 'nwoBplCPSSRCRYyPLcGeyCFLMIGtguMHkoVxQTYE2sfF0PzD1MsCsVkE9t7S', '2021-09-18 18:59:51', '2021-09-20 04:56:07'),
+	(1, 'master admin', 'admin2021@admin.com', '$2y$10$vokdTRTD22srSXNOmCibjOO1zAEzvrykJ/BDGq3.cJ7VkF8SM2ONC', 'master', 'ccazt9xGytRIIsQzk4gZaTD6HrGDyskbWYWO4Ovvt75oAndHU5V3ZgMCcmkI', '2021-09-18 18:59:51', '2021-09-20 04:56:07'),
 	(2, 'coba100', 'coba100@admin.com', '$2y$10$Yl5.DbuYWM7lezH1oByEzu/bYNJQxpnhNMDyC52TFdGoWwO08b8gK', 'admin', NULL, '2021-09-24 07:45:00', '2021-09-24 07:45:12');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 

@@ -72,9 +72,10 @@ Route::post('/admin/proses-berita-acara', 'AdminController@proses_berita_acara')
 
     // -- absensi kegiatan
 Route::view('/admin/absensi-kegiatan', 'admin/absensi_kegiatan', ['title' => 'Absensi Kegiatan'])->middleware('auth');
+Route::get('/admin/view-absensi-kegiatan', 'AdminController@view_absensi_kegiatan')->middleware('auth');
 Route::post('/admin/proses-absensi-kegiatan', 'AdminController@proses_absensi_kegiatan')->middleware('auth');
 
-Route::get('/admin/view-absensi', 'AdminController@view_absensi_kegiatan')->middleware('auth');
+Route::get('/admin/view-berita', 'AdminController@view_berita_acara')->middleware('auth');
 
 // VOTING
     // -- main page voting

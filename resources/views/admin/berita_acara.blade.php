@@ -23,37 +23,24 @@
     <p class="text-xl text-center mb-2">Lengkapi data di bawah untuk download berita acara:</p>
     <form action="{{ action('AdminController@proses_berita_acara') }}" method="POST" class="mx-auto flex flex-col w-full md:w-1/2">
         @csrf
-        <label for="nama_ketua" class="mt-2">Ketua OSIS saat ini:</label>
+        <label for="nama_ketua" class="mt-2">Ketua panitia:</label>
         <input type="text" class="form-input" name="nama_ketua" id="nama_ketua">
+        @error('nama_ketua')
+        <span class="text-red-500 text-sm">*{{ $message }}</span>
+        @enderror
         <label for="tempat" class="mt-2">Tempat Pemilihan:</label>
         <input type="text" class="form-input" name="tempat" id="tempat">
+        @error('tempat')
+        <span class="text-red-500 text-sm">*{{ $message }}</span>
+        @enderror
         <label for="tanggal" class="mt-2">Tanggal Pemilihan:</label>
         <input type="date" class="form-input" name="tanggal" id="tanggal">
+        @error('tanggal')
+        <span class="text-red-500 text-sm">*{{ $message }}</span>
+        @enderror
         <button type="submit" class="mt-3 bg-green-500 hover:bg-green-600 focus:ring-2 ring-green-300 focus:bg-green-600 p-3 font-bold text-white text-xl rounded-md w-full">Download Berita Acara</button>
     </form>
 </div>
 
 @endsection
 
-@section('javascript')
-<script>
-// function on_reset() {
-//     Swal.fire({
-//         title: 'Apakah Anda yakin ingin melakukan reset data ?',
-//         icon: 'warning',
-//         showDenyButton: true,
-//         confirmButtonText: 'Iya',
-//         denyButtonText: `Tidak`,
-//     }).then((result) => {
-//         if (result.isConfirmed) {
-//             Swal.fire(
-//                 'Berhasil!',
-//                 'Reset data berhasil dilakukan',
-//                 'success'
-//                 );
-//             document.querySelector('#reset_data').submit();
-//         }
-//     })
-// }
-</script>
-@endsection
