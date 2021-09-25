@@ -40,10 +40,11 @@ class VotingController extends Controller
     }
 
     public function hasil_suara() {
-        $voting = DB::table('voting')
-                    ->leftJoin('kandidat', 'voting.id_kandidat', '=', 'kandidat.id_kandidat')
-                    ->select(DB::raw('kandidat.nama_kandidat, kandidat.foto, kandidat.no_kandidat, kandidat.nis_kandidat, count(voting.id_kandidat) as total_suara'))
-                    ->groupBy('voting.id_kandidat')
+        $voting = DB::table('kandidat')
+                    ->leftJoin('voting', 'kandidat.id_kandidat', '=', 'voting.id_kandidat')
+                    ->select(DB::raw('kandidat.foto, kandidat.no_kandidat, kandidat.nis_kandidat, kandidat.nama_kandidat, COUNT(voting.id_kandidat) as total_suara'))
+                    ->groupBy('kandidat.id_kandidat')
+                    ->orderBy('total_suara', 'desc')
                     ->get();
         $data['title'] = 'Hasil Suara';
         $data['voting'] = $voting;
