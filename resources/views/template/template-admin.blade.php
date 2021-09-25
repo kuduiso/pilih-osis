@@ -32,7 +32,7 @@
                 </div>
 
                 <nav class="mt-10">
-                    <a class="flex items-center mt-4 py-2 px-6 bg-gray-700 bg-opacity-25 text-gray-100" href="{{ url('/admin/dashboard') }}">
+                    <a class="flex items-center mt-4 py-2 px-6 {{ Request::segment(2) === 'dashboard' ? 'bg-gray-700 bg-opacity-25' : null }} text-gray-100" href="{{ url('/admin/dashboard') }}">
                         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -44,7 +44,7 @@
                         <span class="mx-3">Dashboard</span>
                     </a>
 
-                    <a class="flex items-center mt-4 py-2 px-6 text-gray-100 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
+                    <a class="flex items-center mt-4 py-2 px-6 {{ Request::segment(2) === 'data-kandidat' ? 'bg-gray-700 bg-opacity-25' : null }} text-gray-100 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
                         href="{{ url('/admin/data-kandidat') }}">
                         <svg class="fill-current text-white h-6 w-6" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
@@ -53,7 +53,7 @@
                         <span class="mx-3">Kandidat</span>
                     </a>
 
-                    <a class="flex items-center mt-4 py-2 px-6 text-gray-100 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
+                    <a class="flex items-center mt-4 py-2 px-6 {{ Request::segment(2) === 'data-pemilih' ? 'bg-gray-700 bg-opacity-25' : null }} text-gray-100 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
                         href="{{ url('/admin/data-pemilih') }}">
                         <svg class="text-white h-6 w-6" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
@@ -62,7 +62,7 @@
                         <span class="mx-3">Pemilih</span>
                     </a>
 
-                    <a class="flex items-center mt-4 py-2 px-6 text-gray-100 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
+                    <a class="flex items-center mt-4 py-2 px-6 {{ Request::segment(2) === 'data-hasil-suara' ? 'bg-gray-700 bg-opacity-25' : null }} text-gray-100 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
                         href="{{ url('/admin/data-hasil-suara') }}">
                         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -75,7 +75,7 @@
                     </a>
 
                     <ul x-data="{ laporanOpen: false }" class="flex flex-col mt-4">
-                        <li class="flex items-center py-2 px-6 text-gray-100 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
+                        <li class="flex items-center py-2 px-6 {{ (Request::segment(2) === 'absensi-kegiatan') || (Request::segment(2) === 'berita-acara') ? 'bg-gray-700 bg-opacity-25' : null }} text-gray-100 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
                             <svg class="text-white h-6 w-6" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
@@ -108,7 +108,7 @@
                         </div>
                     </ul>
 
-                    <a class="flex items-center mt-4 py-2 px-6 text-gray-100 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
+                    <a class="flex items-center mt-4 py-2 px-6 {{ Request::segment(2) === 'data-admin' ? 'bg-gray-700 bg-opacity-25' : null }} text-gray-100 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
                         href="{{ url('/admin/data-admin') }}">
                         <svg class="fill-current text-white h-6 w-6" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
