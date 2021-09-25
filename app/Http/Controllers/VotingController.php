@@ -18,10 +18,6 @@ class VotingController extends Controller
 
     public function profile_kandidat($id_kandidat) {
         $data['kandidat'] = Kandidat::find($id_kandidat);
-        // echo "<pre>";
-        // var_dump($data);
-        // echo "</pre>";
-        // exit();
         $data['title'] = 'Profil Kandidat';
         return view('/users/profil_kandidat', $data);
     }
@@ -41,9 +37,9 @@ class VotingController extends Controller
 
     public function hasil_suara() {
         $voting = DB::table('kandidat')
+                    ->select('kandidat.foto', 'kandidat.nama_kandidat', 'kandidat.nis_kandidat', 'kandidat.no_kandidat', (DB::raw('COUNT(voting.id_pemilih) as total_suara')))
                     ->leftJoin('voting', 'kandidat.id_kandidat', '=', 'voting.id_kandidat')
-                    ->select(DB::raw('kandidat.foto, kandidat.no_kandidat, kandidat.nis_kandidat, kandidat.nama_kandidat, COUNT(voting.id_kandidat) as total_suara'))
-                    ->groupBy('kandidat.id_kandidat')
+                    ->groupBy('kandidat.nama_kandidat', 'kandidat.foto', 'kandidat.nis_kandidat', 'kandidat.no_kandidat')
                     ->orderBy('total_suara', 'desc')
                     ->get();
         $data['title'] = 'Hasil Suara';
