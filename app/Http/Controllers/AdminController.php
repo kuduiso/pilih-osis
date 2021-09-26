@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Pemilih;
 use App\User;
-use DateTime;
 use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,12 +24,6 @@ class AdminController extends Controller
                     ->select(DB::raw('COUNT(id_kandidat) as total_kandidat'))
                     ->get()
                     ->first();
-        // echo "<pre>";
-        // var_dump($kandidat);
-        // var_dump($pemilih->total_pemilih);
-        // echo $kandidat[0]['total_kandidat'];
-        // echo "</pre>";
-        // exit();
         $data['pemilih'] = $pemilih;
         $data['kandidat'] = $kandidat;
         $data['title'] = 'Dashboard Admin';
@@ -227,7 +220,7 @@ class AdminController extends Controller
         $data['tempat'] = $request->input('tempat');
         $data['tanggal'] = $this->_tgl_indo($request->input('tanggal'));
 
-        // DOM PDF
+
         $voting = DB::table('kandidat')
                     ->leftJoin('voting', 'kandidat.id_kandidat', '=', 'voting.id_kandidat')
                     ->select(DB::raw('kandidat.nama_kandidat, COUNT(voting.id_pemilih) as total_suara'))
@@ -235,22 +228,20 @@ class AdminController extends Controller
                     ->orderBy('total_suara', 'desc')
                     ->get();
         $data['voting'] = $voting;
-        $pdf = PDF::loadview('laporan/berita_acara', $data)->setPaper('A4', 'potrait');
+
+        // SET CHROOT
+        $pdf = PDF::setOptions(['chroot' => public_path('storage'),]);
+        $pdf->loadview('laporan/berita_acara', $data)->setPaper('A4', 'potrait');
         return $pdf->stream();
     }
 
     public function proses_absensi_kegiatan() {
         $data['pemilih'] = Pemilih::all();
-        $pdf = PDF::loadview('laporan/absensi_kegiatan', $data)->setPaper('A4', 'potrait');
-        return $pdf->stream();
-    }
 
-    public function view_berita_acara() {
-        $data['nama'] = 'Ridho';
-        $data['tempat'] = 'Magetan,';
-        $data['tanggal'] = '24 September 2021';
-        $data['pemilih'] = Pemilih::all();
-        return view('/laporan/berita_acara', $data);
+        // SET CHROOT
+        $pdf = PDF::setOptions(['chroot' => public_path('storage'),]);
+        $pdf->loadview('laporan/absensi_kegiatan', $data)->setPaper('A4', 'potrait');
+        return $pdf->stream();
     }
 
     private function _tgl_indo($tanggal){
@@ -270,9 +261,9 @@ class AdminController extends Controller
         );
         $pecahkan = explode('-', $tanggal);
 
-        // variabel pecahkan 0 = tanggal
+        // variabel pecahkan 0 = tahun
         // variabel pecahkan 1 = bulan
-        // variabel pecahkan 2 = tahun
+        // variabel pecahkan 2 = tanggal
         return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
     }
 }
